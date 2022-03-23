@@ -1,0 +1,3 @@
+Autorzy: Aleksander Pytel, Paweł Gacek
+Temat: Zapisy studentów na zajęcia
+Technologie: PostgreSQL, Hibernate
