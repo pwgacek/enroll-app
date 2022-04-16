@@ -5,7 +5,7 @@ BEGIN;
 
 CREATE TABLE IF NOT EXISTS public."Students"
 (
-    "StudentID" text NOT NULL,
+    "StudentID" text NOT NULL CONSTRAINT indexLength check (length("StudentID") = 6),
     "FirstName" text NOT NULL,
     "LastName" text NOT NULL,
     "Pesel" text NOT NULL CONSTRAINT peselLength check ( length("Pesel") = 11 ),
