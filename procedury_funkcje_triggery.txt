@@ -1,0 +1,10 @@
+funkcje:
+no_available_places
+?get_available_courses(index)
+get_courses(semester,faculty)
+?get_courses(etcs)
+procedury:
+?enroll_on_course
+trigger:
+can_enroll(studentid,courseid)
+register()
