@@ -19,3 +19,26 @@ Begin
 end
 $$;
 
+create or replace function getCourses(StudentID text)
+returns table (
+    "CourseID" smallint,
+    "Name" text,
+    "FacultyID" smallint,
+    "LecturerID" smallint,
+    "NumberOfPlaces" smallint,
+    "ETCS" smallint,
+    "Description" text
+) as $$
+declare
+	ids smallint[];
+	student "Students"%rowtype;
+begin
+	select  * into student from "Students" as s where StudentID = s."StudentID";
+	raise notice 'Value: %',student."StudentID";
+	 select ARRAY(select sf."FacultyID" from "StudentsFaculties" as sf where sf."StudentID" = StudentID) into ids;
+	raise notice 'Value: %',ids;
+	return query
+		select c."CourseID",c."Name",c."FacultyID",c."LecturerID",c."NumberOfPlaces",c."ETCS",c."Description" from "Courses" as c
+		where c."Semester" = student."Semester" and c."FacultyID" = any(ids);
+end
+$$ Language plpgsql;
