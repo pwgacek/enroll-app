@@ -27,6 +27,17 @@ public class Student {
      Set<Course> courses;
     @ManyToMany
      Set<Faculty> faculties;
+    public Set<Faculty> getFaculties(){
+        return faculties;
+    }
+
+    public Set<Course> getCourses(){
+        return  courses;
+    }
+    public void enroll(Course course){
+        courses.add(course);
+    }
+
 
     public int getStudentId() {
         return studentId;

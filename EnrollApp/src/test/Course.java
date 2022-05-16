@@ -33,6 +33,7 @@ public class Course {
     @ManyToOne
     private Lecturer lecturer;
 
+
     @ManyToMany(mappedBy = "courses")
     private Set<Student> students;
     public short getCourseId() {
@@ -53,6 +54,14 @@ public class Course {
 
     public short getNumberOfPlaces() {
         return numberOfPlaces;
+    }
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void addStudent(Student student){
+        students.add(student);
     }
 
     public void setNumberOfPlaces(short numberOfPlaces) {
