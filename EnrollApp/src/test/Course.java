@@ -5,8 +5,8 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-//@Table(name = "Courses", schema = "public", catalog = "db2-project")
-public class Courses {
+@Table(name = "Courses", schema = "public", catalog = "projekt")
+public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
 //    @Column(name = "CourseID")
@@ -29,12 +29,12 @@ public class Courses {
     private short semester;
 
     @ManyToOne
-    private Faculties faculty;
+    private Faculty faculty;
     @ManyToOne
-    private Lecturers lecturer;
+    private Lecturer lecturer;
 
     @ManyToMany(mappedBy = "courses")
-    private Set<Students> students;
+    private Set<Student> students;
     public short getCourseId() {
         return courseId;
     }
@@ -87,7 +87,7 @@ public class Courses {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Courses that = (Courses) o;
+        Course that = (Course) o;
         return courseId == that.courseId && numberOfPlaces == that.numberOfPlaces && etcs == that.etcs && semester == that.semester && Objects.equals(name, that.name) && Objects.equals(description, that.description);
     }
 

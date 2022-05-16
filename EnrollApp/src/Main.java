@@ -4,7 +4,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import test.Students;
 
 
 public class Main {
@@ -28,8 +27,11 @@ public class Main {
     public static void main(final String[] args) throws Exception {
         final Session session = getSession();
         Transaction tx = session.beginTransaction();
-        Students student = session.get(Students.class,100123);
-        System.out.println(student.getFirstName());
+        CommunicationUtil communicationUtil = CommunicationUtil.getCommunicationUtil(session);
+        //communicationUtil.printAllStudentNames();
+        communicationUtil.login(100123);
+//        Students student = session.get(Students.class,100123);
+//        System.out.println(student.getFirstName());
         tx.commit();
         try {
         } finally {

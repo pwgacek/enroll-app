@@ -6,7 +6,7 @@ import java.sql.Time;
 import java.util.Objects;
 
 @Embeddable
-class CoursesHoursId implements Serializable {
+class CourseHourId implements Serializable {
     private short courseId;
     private short weekDay;
     private Time startTime;
@@ -36,17 +36,18 @@ class CoursesHoursId implements Serializable {
     }
 }
 @Entity
-//@Table(name = "CoursesHours", schema = "public", catalog = "db2-project")
-public class CoursesHours {
+@Table(name = "CoursesHours", schema = "public", catalog = "projekt")
+public class CourseHour {
 
-    @EmbeddedId CoursesHoursId id;
+    @EmbeddedId
+    CourseHourId id;
     @Basic
 //    @Column(name = "EndTime")
     private Time endTime;
 
     @MapsId("courseId")
     @OneToOne
-    Courses course;
+    Course course;
 
 
     public short getCourseId() {
@@ -85,7 +86,7 @@ public class CoursesHours {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CoursesHours that = (CoursesHours) o;
+        CourseHour that = (CourseHour) o;
         return id.getCourseId() == that.id.getCourseId() && id.getWeekDay() == that.id.getWeekDay() && Objects.equals(id.getStartTime(), that.id.getStartTime()) && Objects.equals(endTime, that.endTime);
     }
 

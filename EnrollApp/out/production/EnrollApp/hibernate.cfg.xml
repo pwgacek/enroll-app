@@ -13,11 +13,11 @@
     <property name="connection.password">postgres</property>
 
 
-    <mapping class="test.Courses"/>
-    <mapping class="test.CoursesHours"/>
-    <mapping class="test.Faculties"/>
-    <mapping class="test.Lecturers"/>
-    <mapping class="test.Students"/>
+    <mapping class="test.Course"/>
+    <mapping class="test.CourseHour"/>
+    <mapping class="test.Faculty"/>
+    <mapping class="test.Lecturer"/>
+    <mapping class="test.Student"/>
 <!--    <mapping class="test.StudentsCoursesEntity"/>-->
 <!--    <mapping class="test.StudentsFacultiesEntity"/>-->
 

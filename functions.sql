@@ -44,3 +44,20 @@ begin
 		where c."Semester" = student."Semester" and c."FacultyID" = any(ids);
 end
 $$ Language plpgsql;
+
+create or replace function contains_student_id(student_id bigint)
+returns bool
+language plpgsql
+as
+$$
+declare
+    student students%ROWTYPE;
+BEGIN
+select  * into student from students  where studentid = student_id limit 1;
+if student is null THEN
+    return false;
+end if;
+return true;
+
+end;
+$$
