@@ -117,3 +117,74 @@ $$
         return used_etcs;
     end;
 $$ Language plpgsql;
+
+create function collision_exists(student_id integer, course_id integer) returns boolean
+    language plpgsql
+as
+$$
+declare
+        chosen_course courses%rowtype;
+        no_collisions smallint;
+
+    begin
+        if not contains_student_id(student_id) then
+            raise exception 'student not found';
+        end if;
+        select into chosen_course * from courses as c where c.courseid = course_id limit 1;
+        if chosen_course is null then
+            raise exception 'course not found';
+        end if;
+
+        select into no_collisions count(c.*) from courses as c inner join students_courses sc on c.courseid = sc.courses_courseid
+        where sc.students_studentid = student_id and c.weekday = chosen_course.weekday
+          and not (c.endtime < chosen_course.starttime or chosen_course.endtime < c.starttime ) ;
+
+        if no_collisions = 0 then 
+            return false;
+        end if;
+        return true;
+
+    end;
+$$;
+
+
+
+create or replace function no_available_places (course_id integer)
+returns smallint
+language plpgsql
+as $$
+DECLARE
+    takenPlaces integer;
+    totalPlaces integer;
+
+Begin
+    if not exists(select * from courses as c where course_id = c.courseid) then
+        raise exception 'Course not found';
+    end if;
+    select c.numberofplaces into totalPlaces from courses as c where c.courseid = course_id limit 1;
+
+    select COUNT(*) into takenPlaces from students_courses as sc where sc.courses_courseid = course_id;
+
+    return totalPlaces - takenPlaces;
+end
+$$;
+
+create or replace function enroll_trigger_function()
+returns trigger as
+$$
+    declare
+        chosen_course courses%rowtype;
+BEGIN
+    if no_available_places(new.courses_courseid) = 0 then
+        raise exception 'no available place';
+end if;
+    if collision_exists(new.students_studentid,new.courses_courseid) then
+        raise exception 'schedule collision';
+    end if;
+    select into chosen_course * from courses as c where c.courseid = new.courses_courseid;
+    if get_used_etcs(new.students_studentid) + chosen_course.etcs > 30 then
+        raise exception 'not enough etcs';
+    end if;
+    return new;
+end
+$$language plpgsql;

@@ -13,13 +13,13 @@
     <property name="connection.password">postgres</property>
 
 
-    <mapping class="test.Course"/>
-    <mapping class="test.CourseHour"/>
-    <mapping class="test.Faculty"/>
-    <mapping class="test.Lecturer"/>
-    <mapping class="test.Student"/>
-<!--    <mapping class="test.StudentsCoursesEntity"/>-->
-<!--    <mapping class="test.StudentsFacultiesEntity"/>-->
+    <mapping class="hibernate_classes.Course"/>
+<!--    <mapping class="hibernate_classes.CourseHour"/>-->
+    <mapping class="hibernate_classes.Faculty"/>
+    <mapping class="hibernate_classes.Lecturer"/>
+    <mapping class="hibernate_classes.Student"/>
+<!--    <mapping class="hibernate_classes.StudentsCoursesEntity"/>-->
+<!--    <mapping class="hibernate_classes.StudentsFacultiesEntity"/>-->
 
   </session-factory>
 </hibernate-configuration>

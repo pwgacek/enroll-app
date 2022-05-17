@@ -29,3 +29,7 @@ $$;
 CREATE TRIGGER enrollTrigger
     before INSERT on "StudentsCourses"
     for each row execute procedure canEnroll();
+
+
+create trigger enroll_trigger before insert
+on students_courses for each  row execute procedure enroll_trigger_function();

@@ -1,40 +1,45 @@
-package test2;
+package hibernate_classes;
 
 import javax.persistence.*;
+import java.sql.Time;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "Courses", schema = "public", catalog = "db2-project")
-public class Courses {
+@Table(name = "Courses", schema = "public", catalog = "projekt")
+public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "CourseID")
+//    @Column(name = "CourseID")
     private short courseId;
-    @Basic
-    @Column(name = "Name")
+//    @Basic
+//    @Column(name = "Name")
     private String name;
 
-    @Basic
-    @Column(name = "NumberOfPlaces")
+//    @Basic
+//    @Column(name = "NumberOfPlaces")
     private short numberOfPlaces;
-    @Basic
-    @Column(name = "ETCS")
+//    @Basic
+//    @Column(name = "ETCS")
     private short etcs;
-    @Basic
-    @Column(name = "Description")
+//    @Basic
+//    @Column(name = "Description")
     private String description;
-    @Basic
-    @Column(name = "Semester")
+//    @Basic
+//    @Column(name = "Semester")
     private short semester;
+    private short weekDay;
+    private Time startTime;
+    private Time endTime;
 
     @ManyToOne
-    private Faculties faculty;
+    private Faculty faculty;
     @ManyToOne
-    private Lecturers lecturer;
+    private Lecturer lecturer;
+
 
     @ManyToMany(mappedBy = "courses")
-    private Set<Students> students;
+    private Set<Student> students;
     public short getCourseId() {
         return courseId;
     }
@@ -53,6 +58,14 @@ public class Courses {
 
     public short getNumberOfPlaces() {
         return numberOfPlaces;
+    }
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void addStudent(Student student){
+        students.add(student);
     }
 
     public void setNumberOfPlaces(short numberOfPlaces) {
@@ -82,12 +95,25 @@ public class Courses {
     public void setSemester(short semester) {
         this.semester = semester;
     }
+        public short getWeekDay() {
+        return weekDay;
+    }
+
+    public Time getStartTime() {
+        return startTime;
+    }
+
+
+    public Time getEndTimeTime() {
+        return endTime;
+    }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Courses that = (Courses) o;
+        Course that = (Course) o;
         return courseId == that.courseId && numberOfPlaces == that.numberOfPlaces && etcs == that.etcs && semester == that.semester && Objects.equals(name, that.name) && Objects.equals(description, that.description);
     }
 

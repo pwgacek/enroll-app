@@ -1,21 +1,21 @@
-package test2;
+package hibernate_classes;
 
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "Faculties", schema = "public", catalog = "db2-project")
-public class Faculties {
+@Table(name = "Faculties", schema = "public", catalog = "projekt")
+public class Faculty {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "FacultyID")
+    //@Column(name = "FacultyID")
     private short facultyId;
-    @Basic
-    @Column(name = "Name")
+    //@Basic
+    //@Column(name = "Name")
     private String name;
     @ManyToMany(mappedBy = "faculties")
-    private Set<Students> students;
+    private Set<Student> students;
 
 
     public short getFacultyId() {
@@ -38,7 +38,7 @@ public class Faculties {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Faculties that = (Faculties) o;
+        Faculty that = (Faculty) o;
         return facultyId == that.facultyId && Objects.equals(name, that.name);
     }
 

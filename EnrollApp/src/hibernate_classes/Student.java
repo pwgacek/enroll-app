@@ -1,4 +1,4 @@
-package test;
+package hibernate_classes;
 
 import javax.persistence.*;
 import java.util.Objects;
