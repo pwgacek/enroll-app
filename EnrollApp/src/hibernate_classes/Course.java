@@ -12,20 +12,20 @@ public class Course {
     @Id
 //    @Column(name = "CourseID")
     private short courseId;
-//    @Basic
+    //    @Basic
 //    @Column(name = "Name")
     private String name;
 
-//    @Basic
+    //    @Basic
 //    @Column(name = "NumberOfPlaces")
     private short numberOfPlaces;
-//    @Basic
+    //    @Basic
 //    @Column(name = "ETCS")
     private short etcs;
-//    @Basic
+    //    @Basic
 //    @Column(name = "Description")
     private String description;
-//    @Basic
+    //    @Basic
 //    @Column(name = "Semester")
     private short semester;
     private short weekDay;
@@ -40,6 +40,7 @@ public class Course {
 
     @ManyToMany(mappedBy = "courses")
     private Set<Student> students;
+
     public short getCourseId() {
         return courseId;
     }
@@ -64,7 +65,7 @@ public class Course {
         return students;
     }
 
-    public void addStudent(Student student){
+    public void addStudent(Student student) {
         students.add(student);
     }
 
@@ -95,7 +96,8 @@ public class Course {
     public void setSemester(short semester) {
         this.semester = semester;
     }
-        public short getWeekDay() {
+
+    public short getWeekDay() {
         return weekDay;
     }
 
@@ -120,5 +122,10 @@ public class Course {
     @Override
     public int hashCode() {
         return Objects.hash(courseId, name, numberOfPlaces, etcs, description, semester);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%-30s Ects: %2d Semestr: %2d\n", name, etcs, semester);
     }
 }

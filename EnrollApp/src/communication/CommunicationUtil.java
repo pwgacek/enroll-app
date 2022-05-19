@@ -1,3 +1,5 @@
+package communication;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import hibernate_classes.Course;
@@ -20,6 +22,12 @@ public class CommunicationUtil {
             CommunicationUtil.session = session;
         }
         return communicationUtil;
+    }
+    public static CommunicationUtil getCommunicationUtil(){
+        if (communicationUtil == null)
+            throw new IllegalStateException("CommunicationUnil not yet initialized");
+        return communicationUtil;
+
     }
 
 //    public void printAllStudentNames(){
@@ -45,7 +53,8 @@ public class CommunicationUtil {
             System.out.println("Hello " + loggedStudent.getFirstName());
         }
         else{
-            System.out.println("there is no student with this IndexNumber");
+            tx.commit();
+            throw new IllegalArgumentException("There is no student with this IndexNumber");
         }
         tx.commit();
     }
@@ -59,6 +68,12 @@ public class CommunicationUtil {
         return courses;
     }
 
+    public Student getLoggedStudent(){
+        if(loggedStudent == null){
+            throw new IllegalStateException("No logged in student");
+        }
+        return loggedStudent;
+    }
     public boolean isEnrolled(Course course){
         Transaction tx = session.beginTransaction();
         StoredProcedureQuery q = session.createStoredProcedureQuery("is_student_enrolled")
