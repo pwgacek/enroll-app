@@ -21,6 +21,8 @@ public class BottomBarPanel extends JPanel {
         setVisible(true);
     }
     private void createView(){
-        add(new JLabel("Witaj " + user.getFirstName()));
+        JLabel welcomeText = new JLabel("Witaj " + user.getFirstName());
+        welcomeText.setFont(mainFrame.getUnifiedFont());
+        add(welcomeText);
     }
 }

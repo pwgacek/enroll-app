@@ -25,6 +25,7 @@ public class SubjectsPanel extends JPanel {
     private void createView() {
         setLayout(new BorderLayout());
         subjectsList = new JList<>();
+        subjectsList.setFont(mainFrame.getUnifiedFont());
 
         subjectsList.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {

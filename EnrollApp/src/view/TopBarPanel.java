@@ -15,9 +15,11 @@ public class TopBarPanel extends JPanel {
     }
 
     private void createView(){
-        add(new JLabel("Enroll app"));
+        JLabel title = new JLabel("Enroll app");
+        title.setFont(mainFrame.getUnifiedFont());
+        add(title);
         JButton subjects = new JButton("Przedmioty");
-
+        subjects.setFont(mainFrame.getUnifiedFont());
         subjects.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
