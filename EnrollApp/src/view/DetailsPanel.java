@@ -44,6 +44,7 @@ public class DetailsPanel extends JPanel {
         boolean isEnrolled = CommunicationUtil.getCommunicationUtil().isEnrolled(selectedCourse);
         addInfo("Dzien tygodnia", String.valueOf(selectedCourse.getWeekDay()));
         addInfo("Liczba wszystkich miejsc",String.valueOf(selectedCourse.getNumberOfPlaces()));
+        addInfo("Liczba wolnych miejsc",String.valueOf(CommunicationUtil.getCommunicationUtil().getNumberOfAvailablePlaces(selectedCourse)));
         addInfo("Godzina rozpoczecia",String.valueOf(selectedCourse.getStartTime()));
         addInfo("Godzina zakonczenia",String.valueOf(selectedCourse.getEndTimeTime()));
         addInfo("Czy zapisany", String.valueOf(isEnrolled));
@@ -56,7 +57,7 @@ public class DetailsPanel extends JPanel {
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    CommunicationUtil.getCommunicationUtil().unenroll(selectedCourse);
+                    CommunicationUtil.getCommunicationUtil().unroll(selectedCourse);
                     updateView();
                 }
             });

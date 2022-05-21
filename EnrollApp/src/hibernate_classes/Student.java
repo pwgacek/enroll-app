@@ -23,7 +23,7 @@ public class Student {
 //    @Basic
 //    @Column(name = "Semester")
     private short semester;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
      Set<Course> courses;
     @ManyToMany
      Set<Faculty> faculties;
