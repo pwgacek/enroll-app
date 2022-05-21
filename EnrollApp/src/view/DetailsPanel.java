@@ -42,7 +42,19 @@ public class DetailsPanel extends JPanel {
         addInfo("Nazwa kursu", selectedCourse.getName());
         addInfo("Opis", selectedCourse.getDescription());
         boolean isEnrolled = CommunicationUtil.getCommunicationUtil().isEnrolled(selectedCourse);
-        addInfo("Dzien tygodnia", String.valueOf(selectedCourse.getWeekDay()));
+
+        String weekDayName = switch (selectedCourse.getWeekDay()) {
+            case 0 -> "Poniedzialek";
+            case 1 -> "Wtorek";
+            case 2 -> "Sroda";
+            case 3 -> "Czwartek";
+            case 4 -> "Piatek";
+            case 5 -> "Sobota";
+            case 6 -> "Niedziela";
+            default -> throw new IllegalArgumentException("Nieznany dzien tygodnia");
+        };
+
+        addInfo("Dzien tygodnia", weekDayName);
         addInfo("Liczba wszystkich miejsc",String.valueOf(selectedCourse.getNumberOfPlaces()));
         addInfo("Liczba wolnych miejsc",String.valueOf(CommunicationUtil.getCommunicationUtil().getNumberOfAvailablePlaces(selectedCourse)));
         addInfo("Godzina rozpoczecia",String.valueOf(selectedCourse.getStartTime()));
