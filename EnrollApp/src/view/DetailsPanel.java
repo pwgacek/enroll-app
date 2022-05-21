@@ -77,9 +77,19 @@ public class DetailsPanel extends JPanel {
             button.setText("Zapisz sie");
             button.addActionListener(new ActionListener() {
                 @Override
-                public void actionPerformed(ActionEvent e) {
-                    CommunicationUtil.getCommunicationUtil().enroll(selectedCourse);
-                    updateView();
+                public void actionPerformed(ActionEvent ae) {
+                    try
+                    {
+                        CommunicationUtil.getCommunicationUtil().enroll(selectedCourse);
+                        updateView();
+                    }catch (RuntimeException e){
+                        Throwable cause = e.getCause();
+                        cause = cause.getCause();
+                        JOptionPane.showMessageDialog(mainFrame,
+                                cause.getMessage().split("\n")[0],
+                                "Error",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
                 }
             });
 
