@@ -126,6 +126,7 @@ public class Course {
 
     @Override
     public String toString() {
-        return String.format("%-30s Ects: %2d Semestr: %2d\n", name, etcs, semester);
+        int spacing = 60 - name.length();
+        return String.format("%-" + spacing +"s Ects: %-20d Wydzial: %s\n", name, etcs, faculty.getName());
     }
 }
