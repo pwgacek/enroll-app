@@ -266,6 +266,7 @@ public class CommunicationUtil {
 //                throw e;
 //            }finally {
                 if(session != null)session.close();
+                throw e;
             }
 
         }
