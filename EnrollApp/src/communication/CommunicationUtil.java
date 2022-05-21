@@ -1,34 +1,86 @@
 package communication;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import hibernate_classes.Course;
 import hibernate_classes.Student;
+import org.hibernate.cfg.Configuration;
 
 import javax.persistence.*;
 import java.util.List;
 
 
 public class CommunicationUtil {
-    private static  CommunicationUtil communicationUtil = null;
-    private static Session session;
+
+
+    private static  SessionFactory ourSessionFactory;
+    private static Session session = null;
+    static {
+        try {
+            Configuration configuration = new Configuration();
+            configuration.configure();
+
+            ourSessionFactory = configuration.buildSessionFactory();
+        } catch (Throwable ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
+
+    public static Session getSession() throws HibernateException {
+        if(session == null){
+
+             try {
+                 Configuration configuration = new Configuration();
+                 configuration.configure();
+
+                 ourSessionFactory = configuration.buildSessionFactory();
+             } catch (Throwable ex) {
+                 throw new ExceptionInInitializerError(ex);
+             }
+
+            System.out.println();
+            System.out.println("OPENING NEW SESSION");
+            System.out.println();
+            return ourSessionFactory.openSession();
+        }else if(!session.isOpen()){
+
+            try {
+                Configuration configuration = new Configuration();
+                configuration.configure();
+
+                ourSessionFactory = configuration.buildSessionFactory();
+            } catch (Throwable ex) {
+                throw new ExceptionInInitializerError(ex);
+            }
+
+            System.out.println("SESSION WAS CLOSED SO OPENING IT");
+            return ourSessionFactory.openSession();
+        }
+
+        return session;
+    }
+
+    private static CommunicationUtil communicationUtil = null;
     private static boolean logged = false;
     private static Student loggedStudent;
-    private CommunicationUtil(){}
 
-    public static CommunicationUtil getCommunicationUtil(Session session) {
-        if(communicationUtil == null){
+    private CommunicationUtil() {
+    }
+
+    public static CommunicationUtil getCommunicationUtil() {
+        if (communicationUtil == null) {
             communicationUtil = new CommunicationUtil();
-            CommunicationUtil.session = session;
         }
         return communicationUtil;
     }
-    public static CommunicationUtil getCommunicationUtil(){
-        if (communicationUtil == null)
-            throw new IllegalStateException("CommunicationUnil not yet initialized");
-        return communicationUtil;
-
-    }
+//    public static CommunicationUtil getCommunicationUtil(){
+//        if (communicationUtil == null)
+//            throw new IllegalStateException("CommunicationUnil not yet initialized");
+//        return communicationUtil;
+//
+//    }
 
 //    public void printAllStudentNames(){
 //        Query q = session.createQuery("from test.Student");
@@ -39,94 +91,206 @@ public class CommunicationUtil {
 //
 //    }
 
-    public  void login(int indexNumber){
-        Transaction tx = session.beginTransaction();
-        StoredProcedureQuery q = session.createStoredProcedureQuery("contains_student_id")
-                .registerStoredProcedureParameter(1,Integer.class, ParameterMode.IN)
-                .setParameter(1,indexNumber);
-        logged = (boolean) q.getSingleResult();
-        if(logged){
-            TypedQuery<Student> q2 = session.createQuery("from hibernate_classes.Student as student where student.id = :id", Student.class);
-            q2.setParameter("id",indexNumber);
-            loggedStudent = q2.getSingleResult();
-            System.out.println("successfully logged in!");
-            System.out.println("Hello " + loggedStudent.getFirstName());
-        }
-        else{
+    public void login(int indexNumber) {
+        Transaction tx = null;
+
+        try {
+            session = getSession();
+            tx = session.beginTransaction();
+            tx.setTimeout(5);
+
+            StoredProcedureQuery q = session.createStoredProcedureQuery("contains_student_id")
+                    .registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN)
+                    .setParameter(1, indexNumber);
+            logged = (boolean) q.getSingleResult();
+            if (logged) {
+                TypedQuery<Student> q2 = session.createQuery("from hibernate_classes.Student as student where student.id = :id", Student.class);
+                q2.setParameter("id", indexNumber);
+                loggedStudent = q2.getSingleResult();
+                System.out.println("successfully logged in!");
+                System.out.println("Hello " + loggedStudent.getFirstName());
+            } else {
+                tx.commit();
+                throw new IllegalArgumentException("There is no student with this IndexNumber");
+            }
             tx.commit();
-            throw new IllegalArgumentException("There is no student with this IndexNumber");
+
+
+        } catch (RuntimeException e) {
+            try {
+                if (tx != null) tx.rollback();
+            } catch (RuntimeException rbe) {
+                System.out.println("Couldn’t roll back transaction");
+            }
+            if(session != null)session.close();
+            //throw e;
         }
-        tx.commit();
+
+
     }
-    public List<Course> getCourses(){
-        Transaction tx = session.beginTransaction();
-        StoredProcedureQuery q = session.createStoredProcedureQuery("get_courses",Course.class)
-                .registerStoredProcedureParameter(1, Integer.class,ParameterMode.IN)
-                .setParameter(1,loggedStudent.getStudentId());
-        List <Course> courses = q.getResultList();
-        tx.commit();
+
+    public List<Course> getCourses() {
+
+        Transaction tx = null;
+        List<Course> courses = null;
+
+        try {
+            session = getSession();
+
+            tx = session.beginTransaction();
+            tx.setTimeout(5);
+
+            StoredProcedureQuery q = session.createStoredProcedureQuery("get_courses", Course.class)
+                    .registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN)
+                    .setParameter(1, loggedStudent.getStudentId());
+            courses = q.getResultList();
+            tx.commit();
+
+
+        } catch (RuntimeException e) {
+            try {
+                if (tx != null) tx.rollback();
+            } catch (RuntimeException rbe) {
+                System.out.println("Couldn’t roll back transaction");
+            }
+            if(session != null)session.close();
+        }
+
+
         return courses;
     }
 
-    public Student getLoggedStudent(){
-        if(loggedStudent == null){
+    public Student getLoggedStudent() {
+        if (loggedStudent == null) {
             throw new IllegalStateException("No logged in student");
         }
         return loggedStudent;
     }
-    public boolean isEnrolled(Course course){
-        Transaction tx = session.beginTransaction();
-        StoredProcedureQuery q = session.createStoredProcedureQuery("is_student_enrolled")
-                .registerStoredProcedureParameter(1,Integer.class, ParameterMode.IN)
-                .registerStoredProcedureParameter(2,Short.class, ParameterMode.IN)
-                .setParameter(1,loggedStudent.getStudentId())
-                .setParameter(2,course.getCourseId());
 
-        boolean result = (boolean)q.getSingleResult();
-        tx.commit();
-        return result;
-    }
+    public boolean isEnrolled(Course course) {
 
-    public void getException(){
-        Transaction tx = session.beginTransaction();
-        StoredProcedureQuery q = session.createStoredProcedureQuery("get_exception");
-        try{
-            q.getResultList();
 
-        }catch (PersistenceException e){
+        Transaction tx = null;
+        boolean result = false;
 
-            Throwable cause = e.getCause();
-            cause = cause.getCause();
-            System.out.println( "~~~~" + (cause.getMessage().split("\n"))[0]);
+        try {
+            session = getSession();
+
+            tx = session.beginTransaction();
+            tx.setTimeout(5);
+
+            StoredProcedureQuery q = session.createStoredProcedureQuery("is_student_enrolled")
+                    .registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN)
+                    .registerStoredProcedureParameter(2, Short.class, ParameterMode.IN)
+                    .setParameter(1, loggedStudent.getStudentId())
+                    .setParameter(2, course.getCourseId());
+
+            result = (boolean) q.getSingleResult();
+            tx.commit();
+
+        } catch (RuntimeException e) {
+            try {
+                if (tx != null) tx.rollback();
+                System.out.println(e.getMessage());
+            } catch (RuntimeException rbe) {
+                System.out.println("Couldn’t roll back transaction");
+            }
+            if(session != null)session.close();
         }
-        tx.commit();
+        System.out.println("czy jest enrolled? " + result);
+        return result;
+
+
     }
 
-    public void enroll(Course course){
-        if(!isEnrolled(course)){
-            Transaction tx = session.beginTransaction();
+//    public void getException(){
+//        Transaction tx = session.beginTransaction();
+//        StoredProcedureQuery q = session.createStoredProcedureQuery("get_exception");
+//        try{
+//            q.getResultList();
+//
+//        }catch (PersistenceException e){
+//
+//            Throwable cause = e.getCause();
+//            cause = cause.getCause();
+//            System.out.println( "~~~~" + (cause.getMessage().split("\n"))[0]);
+//        }
+//        tx.commit();
+//    }
 
-            loggedStudent.enroll(course);
-            course.addStudent(loggedStudent);
-            try{
+    public void enroll(Course course) {
+        if (!isEnrolled(course)) {
+
+            Transaction tx = null;
+
+            try {
+
+                session = getSession();
+                tx = session.beginTransaction();
+                tx.setTimeout(5);
+
+                loggedStudent.enroll(course);
+                course.addStudent(loggedStudent);
+                session.update(loggedStudent);
+                session.update(course);
+
+//                System.out.println("commituje");
                 tx.commit();
 
-            }catch(PersistenceException e){
-                Throwable cause = e.getCause();
-                cause = cause.getCause();
-                System.out.println( "~~~~" + (cause.getMessage().split("\n"))[0]);
+
+            } catch (RuntimeException e) {
+                try {
+                    loggedStudent.getCourses().remove(course);
+                    course.getStudents().remove(loggedStudent);
+                    session.update(loggedStudent);
+                    session.update(course);
+                    Throwable cause = e.getCause();
+                    cause = cause.getCause();
+                    System.out.println("~~~~" + (cause.getMessage().split("\n"))[0]);
+                    if (tx != null) tx.rollback();
+                } catch (RuntimeException rbe) {
+                    System.out.println("cant rollback");
+                }
+//                throw e;
+//            }finally {
+                if(session != null)session.close();
             }
+
         }
 
     }
-    public void unenroll(Course course){
-        if(isEnrolled(course)){
-            Transaction tx = session.beginTransaction();
-            loggedStudent.getCourses().remove(course);
-            course.getStudents().remove(loggedStudent);
-            tx.commit();
+
+    public void unroll(Course course) {
+        if (isEnrolled(course)) {
+
+            Transaction tx = null;
+
+            try {
+                session = getSession();
+
+                tx = session.beginTransaction();
+                tx.setTimeout(5);
+
+                loggedStudent.getCourses().remove(course);
+                course.getStudents().remove(loggedStudent);
+                session.update(loggedStudent);
+                session.update(course);
+//                System.out.println("commituje");
+                tx.commit();
+
+
+
+            } catch (RuntimeException e) {
+                try {
+                    System.out.println(e.getMessage());
+
+                    if (tx != null) tx.rollback();
+                } catch (RuntimeException rbe) {
+                    System.out.println("Couldn’t roll back transaction");
+                }
+                if(session != null)session.close();
+            }
         }
-    }
 
 //    public boolean get(){}
 //
@@ -137,6 +301,5 @@ public class CommunicationUtil {
 //    }
 
 
-
-
+    }
 }

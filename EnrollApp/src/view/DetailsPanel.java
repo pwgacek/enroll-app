@@ -56,7 +56,7 @@ public class DetailsPanel extends JPanel {
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    CommunicationUtil.getCommunicationUtil().unenroll(selectedCourse);
+                    CommunicationUtil.getCommunicationUtil().unroll(selectedCourse);
                     updateView();
                 }
             });

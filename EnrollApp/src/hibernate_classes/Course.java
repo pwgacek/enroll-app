@@ -38,7 +38,7 @@ public class Course {
     private Lecturer lecturer;
 
 
-    @ManyToMany(mappedBy = "courses")
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.EAGER)
     private Set<Student> students;
 
     public short getCourseId() {
