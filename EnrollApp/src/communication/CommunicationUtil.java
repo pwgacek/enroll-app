@@ -31,29 +31,12 @@ public class CommunicationUtil {
     public static Session getSession() throws HibernateException {
         if(session == null){
 
-             try {
-                 Configuration configuration = new Configuration();
-                 configuration.configure();
-
-                 ourSessionFactory = configuration.buildSessionFactory();
-             } catch (Throwable ex) {
-                 throw new ExceptionInInitializerError(ex);
-             }
-
             System.out.println();
             System.out.println("OPENING NEW SESSION");
             System.out.println();
             return ourSessionFactory.openSession();
         }else if(!session.isOpen()){
 
-            try {
-                Configuration configuration = new Configuration();
-                configuration.configure();
-
-                ourSessionFactory = configuration.buildSessionFactory();
-            } catch (Throwable ex) {
-                throw new ExceptionInInitializerError(ex);
-            }
 
             System.out.println("SESSION WAS CLOSED SO OPENING IT");
             return ourSessionFactory.openSession();
@@ -117,6 +100,8 @@ public class CommunicationUtil {
 
 
         } catch (RuntimeException e) {
+
+            if(e.getClass() == IllegalArgumentException.class)throw new IllegalArgumentException("There is no student with this IndexNumber");
             try {
                 if (tx != null) tx.rollback();
             } catch (RuntimeException rbe) {
