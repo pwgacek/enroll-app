@@ -152,6 +152,33 @@ public class CommunicationUtil {
         return loggedStudent;
     }
 
+    public short getNumberOfAvailablePlaces(Course course){
+        Transaction tx = null;
+        short result = 0;
+        try{
+            session = getSession();
+
+            tx = session.beginTransaction();
+            tx.setTimeout(5);
+            StoredProcedureQuery q = session.createStoredProcedureQuery("no_available_places")
+                    .registerStoredProcedureParameter(1,Short.class,ParameterMode.IN)
+                    .setParameter(1,course.getCourseId());
+
+            result = (short) q.getSingleResult();
+            tx.commit();
+        }catch (RuntimeException e) {
+            try {
+                if (tx != null) tx.rollback();
+                System.out.println(e.getMessage());
+            } catch (RuntimeException rbe) {
+                System.out.println("Couldn’t roll back transaction");
+            }
+            if(session != null)session.close();
+        }
+        return result;
+    }
+
+
     public boolean isEnrolled(Course course) {
 
 
