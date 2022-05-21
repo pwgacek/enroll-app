@@ -63,6 +63,16 @@ public class DetailsPanel extends JPanel {
             });
         } else if (CommunicationUtil.getCommunicationUtil().getNumberOfAvailablePlaces(selectedCourse) == 0) {
             button.setText("Brak wolnych miejsc");
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JOptionPane.showMessageDialog(mainFrame,
+                            "Brak wolnych miejsc",
+                            "Error",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            });
+
         } else{
             button.setText("Zapisz sie");
             button.addActionListener(new ActionListener() {
