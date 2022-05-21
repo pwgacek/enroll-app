@@ -59,9 +59,15 @@ public class LoginPanel extends JPanel {
             CommunicationUtil.getCommunicationUtil().login(index);
             loginSuccess();
         }catch (NumberFormatException e){
-            errorMessage.setText("Enter a number");
+            JOptionPane.showMessageDialog(mainFrame,
+                "Enter a number",
+                "Error",
+                JOptionPane.WARNING_MESSAGE);
         }catch (IllegalArgumentException e){
-            errorMessage.setText("User with given index not found");
+            JOptionPane.showMessageDialog(mainFrame,
+                    "User with given index not found",
+                    "Error",
+                    JOptionPane.WARNING_MESSAGE);
         }
         // Change view - login success
     }
