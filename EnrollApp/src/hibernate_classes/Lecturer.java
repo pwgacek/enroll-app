@@ -25,33 +25,21 @@ public class Lecturer {
         return lecturerId;
     }
 
-    public void setLecturerId(short lecturerId) {
-        this.lecturerId = lecturerId;
-    }
+
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
 
     public String getLastName() {
         return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getDegree() {
         return degree;
     }
 
-    public void setDegree(String degree) {
-        this.degree = degree;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -66,5 +54,8 @@ public class Lecturer {
         return Objects.hash(lecturerId, firstName, lastName, degree);
     }
 
-
+    @Override
+    public String toString() {
+        return firstName + " " + lastName ;
+    }
 }

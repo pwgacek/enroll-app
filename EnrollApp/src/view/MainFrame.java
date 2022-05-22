@@ -27,7 +27,8 @@ public class MainFrame extends JFrame {
     private Font unifiedFont;
 
     public MainFrame() {
-        setSize(500, 500);
+        setSize(500, 530);
+        setResizable(false);
         setTitle("Enroll");
         center();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

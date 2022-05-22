@@ -43,41 +43,26 @@ public class Student {
         return studentId;
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
-    }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
     public String getPesel() {
         return pesel;
     }
 
-    public void setPesel(String pesel) {
-        this.pesel = pesel;
-    }
 
     public short getSemester() {
         return semester;
     }
 
-    public void setSemester(short semester) {
-        this.semester = semester;
-    }
 
     @Override
     public boolean equals(Object o) {

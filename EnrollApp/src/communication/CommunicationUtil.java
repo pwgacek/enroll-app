@@ -15,7 +15,7 @@ import java.util.List;
 public class CommunicationUtil {
 
 
-    private static  SessionFactory ourSessionFactory;
+    private static final SessionFactory ourSessionFactory;
     private static Session session = null;
     static {
         try {
@@ -37,8 +37,7 @@ public class CommunicationUtil {
             return ourSessionFactory.openSession();
         }else if(!session.isOpen()){
 
-
-            System.out.println("SESSION WAS CLOSED SO OPENING IT");
+            System.out.println("SESSION WAS CLOSED, OPENING NEW SESSION");
             return ourSessionFactory.openSession();
         }
 
@@ -62,15 +61,6 @@ public class CommunicationUtil {
 //        if (communicationUtil == null)
 //            throw new IllegalStateException("CommunicationUnil not yet initialized");
 //        return communicationUtil;
-//
-//    }
-
-//    public void printAllStudentNames(){
-//        Query q = session.createQuery("from test.Student");
-//        List<Student> allStudents = q.getResultList();
-//        for(Student student : allStudents){
-//            System.out.println(student.getFirstName());
-//        }
 //
 //    }
 
@@ -108,7 +98,6 @@ public class CommunicationUtil {
                 System.out.println("Couldn’t roll back transaction");
             }
             if(session != null)session.close();
-            //throw e;
         }
 
 
@@ -181,7 +170,6 @@ public class CommunicationUtil {
 
     public boolean isEnrolled(Course course) {
 
-
         Transaction tx = null;
         boolean result = false;
 
@@ -209,26 +197,10 @@ public class CommunicationUtil {
             }
             if(session != null)session.close();
         }
-        System.out.println("czy jest enrolled? " + result);
         return result;
-
 
     }
 
-//    public void getException(){
-//        Transaction tx = session.beginTransaction();
-//        StoredProcedureQuery q = session.createStoredProcedureQuery("get_exception");
-//        try{
-//            q.getResultList();
-//
-//        }catch (PersistenceException e){
-//
-//            Throwable cause = e.getCause();
-//            cause = cause.getCause();
-//            System.out.println( "~~~~" + (cause.getMessage().split("\n"))[0]);
-//        }
-//        tx.commit();
-//    }
 
     public void enroll(Course course) {
         if (!isEnrolled(course)) {
@@ -246,7 +218,6 @@ public class CommunicationUtil {
                 session.update(loggedStudent);
                 session.update(course);
 
-//                System.out.println("commituje");
                 tx.commit();
 
 
@@ -256,15 +227,11 @@ public class CommunicationUtil {
                     course.getStudents().remove(loggedStudent);
                     session.update(loggedStudent);
                     session.update(course);
-                    Throwable cause = e.getCause();
-                    cause = cause.getCause();
-                    System.out.println("~~~~" + (cause.getMessage().split("\n"))[0]);
                     if (tx != null) tx.rollback();
                 } catch (RuntimeException rbe) {
                     System.out.println("cant rollback");
                 }
-//                throw e;
-//            }finally {
+
                 if(session != null)session.close();
                 throw e;
             }
@@ -288,10 +255,7 @@ public class CommunicationUtil {
                 course.getStudents().remove(loggedStudent);
                 session.update(loggedStudent);
                 session.update(course);
-//                System.out.println("commituje");
                 tx.commit();
-
-
 
             } catch (RuntimeException e) {
                 try {
@@ -304,14 +268,6 @@ public class CommunicationUtil {
                 if(session != null)session.close();
             }
         }
-
-//    public boolean get(){}
-//
-//
-//    public boolean canEnroll(Course course){
-//        if(loggedStudent.)
-//
-//    }
 
 
     }

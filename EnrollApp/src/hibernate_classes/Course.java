@@ -45,17 +45,11 @@ public class Course {
         return courseId;
     }
 
-    public void setCourseId(short courseId) {
-        this.courseId = courseId;
-    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public short getNumberOfPlaces() {
         return numberOfPlaces;
@@ -69,33 +63,28 @@ public class Course {
         students.add(student);
     }
 
-    public void setNumberOfPlaces(short numberOfPlaces) {
-        this.numberOfPlaces = numberOfPlaces;
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public Lecturer getLecturer() {
+        return lecturer;
     }
 
     public short getEtcs() {
         return etcs;
     }
 
-    public void setEtcs(short etcs) {
-        this.etcs = etcs;
-    }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public short getSemester() {
         return semester;
     }
 
-    public void setSemester(short semester) {
-        this.semester = semester;
-    }
 
     public short getWeekDay() {
         return weekDay;

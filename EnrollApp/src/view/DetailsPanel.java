@@ -40,6 +40,8 @@ public class DetailsPanel extends JPanel {
         buttonContainer.removeAll();
 
         addInfo("Nazwa kursu", selectedCourse.getName());
+        addInfo("Wydzial",selectedCourse.getFaculty().getName());
+        addInfo("Wykladowca",selectedCourse.getLecturer().toString());
         addInfo("Opis", selectedCourse.getDescription());
         boolean isEnrolled = CommunicationUtil.getCommunicationUtil().isEnrolled(selectedCourse);
 
@@ -66,6 +68,7 @@ public class DetailsPanel extends JPanel {
         buttonContainer.add(button,BorderLayout.CENTER);
         if(isEnrolled){
             button.setText("Wypisz sie");
+            button.setEnabled(true);
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -74,7 +77,8 @@ public class DetailsPanel extends JPanel {
                 }
             });
         } else if (CommunicationUtil.getCommunicationUtil().getNumberOfAvailablePlaces(selectedCourse) == 0) {
-            button.setText("Brak wolnych miejsc");
+            button.setText("Zapisz sie");
+            button.setEnabled(false);
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -87,6 +91,7 @@ public class DetailsPanel extends JPanel {
 
         } else{
             button.setText("Zapisz sie");
+            button.setEnabled(true);
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {

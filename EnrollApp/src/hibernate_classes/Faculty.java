@@ -22,17 +22,11 @@ public class Faculty {
         return facultyId;
     }
 
-    public void setFacultyId(short facultyId) {
-        this.facultyId = facultyId;
-    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @Override
     public boolean equals(Object o) {
