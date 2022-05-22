@@ -1,0 +1,15 @@
+1. klonujemy repozytorium:
+$ git clone https://github.com/pwgacek/projekt-bd2.git
+
+2. pobieramy baze z dockera i odpalamy ją na porcie np 5433
+docker pull pwgacek/db_project
+docker run --name db_container --env PGDATA=postgres -d -p 5433:5432 -i pwgacek/db_project
+
+
+jeśli nie nastąpiło automatyczne połączenie projektu z bazą :
+
+połączyć się z bazą na wskazanym porcie
+hasło: postgres, login : postgres, nazwa bazy : enroll_database
+w jednej z klas hibernate'a po najechaniu na błąd wybrać opcje Assign Data Source -> enroll_database 
+
+3. odpalić projekt, przykladowe loginy 100123, 100123, 100128
