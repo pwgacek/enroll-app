@@ -211,7 +211,7 @@ public class CommunicationUtil {
 
                 session = getSession();
                 tx = session.beginTransaction();
-                tx.setTimeout(5);
+                tx.setTimeout(10);
 
                 loggedStudent.enroll(course);
                 course.addStudent(loggedStudent);
@@ -229,6 +229,8 @@ public class CommunicationUtil {
                     session.update(course);
                     if (tx != null) tx.rollback();
                 } catch (RuntimeException rbe) {
+                    System.out.println(rbe.getMessage());
+
                     System.out.println("cant rollback");
                 }
 

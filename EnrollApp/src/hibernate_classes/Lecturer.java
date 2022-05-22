@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Lecturers", schema = "public", catalog = "projekt")
+@Table(name = "Lecturers", schema = "public", catalog = "enroll_database")
 public class Lecturer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -56,6 +56,6 @@ public class Lecturer {
 
     @Override
     public String toString() {
-        return firstName + " " + lastName ;
+        return degree + " " + firstName + " " + lastName ;
     }
 }

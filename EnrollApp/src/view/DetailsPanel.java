@@ -101,11 +101,20 @@ public class DetailsPanel extends JPanel {
                         updateView();
                     }catch (RuntimeException e){
                         Throwable cause = e.getCause();
-                        cause = cause.getCause();
-                        JOptionPane.showMessageDialog(mainFrame,
-                                cause.getMessage().split("\n")[0],
-                                "Error",
-                                JOptionPane.WARNING_MESSAGE);
+                        if(cause != null) cause = cause.getCause();
+                        if(cause != null){
+                            JOptionPane.showMessageDialog(mainFrame,
+                                    cause.getMessage().split("\n")[0],
+                                    "Error",
+                                    JOptionPane.WARNING_MESSAGE);
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(mainFrame,
+                                    e.getMessage().split("\n")[0],
+                                    "Error",
+                                    JOptionPane.WARNING_MESSAGE);
+                        }
+
                     }
                 }
             });
