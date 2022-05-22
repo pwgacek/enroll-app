@@ -14,12 +14,10 @@
 
 
     <mapping class="hibernate_classes.Course"/>
-<!--    <mapping class="hibernate_classes.CourseHour"/>-->
     <mapping class="hibernate_classes.Faculty"/>
     <mapping class="hibernate_classes.Lecturer"/>
     <mapping class="hibernate_classes.Student"/>
-<!--    <mapping class="hibernate_classes.StudentsCoursesEntity"/>-->
-<!--    <mapping class="hibernate_classes.StudentsFacultiesEntity"/>-->
+
 
   </session-factory>
 </hibernate-configuration>
