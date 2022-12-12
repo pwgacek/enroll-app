@@ -36,19 +36,21 @@ student (student może studiować na wielu wydziałach)
 
 ## Jak pobrać:
 1. klonujemy repozytorium:
+```
 git clone https://github.com/pwgacek/projekt-bd2.git
-
+```
 2. pobieramy baze z dockera i odpalamy ją na porcie np 5433
+```
 docker pull pwgacek/db_project
 docker run --name db_container --env PGDATA=postgres -d -p 5433:5432 -i pwgacek/db_project
+```
 
+3. łączymy się z bazą na wskazanym porcie </br>
+hasło: postgres, login : postgres, nazwa bazy : enroll_database </br>
 
-3. łączymy się z bazą na wskazanym porcie
-hasło: postgres, login : postgres, nazwa bazy : enroll_database
+4. w jednej z klas hibernate'a po najechaniu na błąd wybieramy opcje Assign Data Source -> enroll_database </br>
 
-4. w jednej z klas hibernate'a po najechaniu na błąd wybieramy opcje Assign Data Source -> enroll_database 
-
-5. odpalamy projekt, przykladowe loginy 100123, 100124, 100128
+5. odpalamy projekt, przykladowe loginy 100123, 100124, 100128 </br>
 
 
 
